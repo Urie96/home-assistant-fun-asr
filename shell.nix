@@ -1,6 +1,6 @@
 let
   inherit (import "${builtins.getEnv "HOME"}/nix" { }) pkgs;
-  customPython = pkgs.python313.withPackages (
+  customPython = pkgs.home-assistant.python.withPackages (
     p: with p; [
       homeassistant-stubs
       aiohttp
