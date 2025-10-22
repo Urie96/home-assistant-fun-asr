@@ -2,7 +2,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
-DOMAIN = "fun_asr"
 
 PLATFORMS = (Platform.STT,)
 

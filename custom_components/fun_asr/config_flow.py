@@ -4,9 +4,7 @@ from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from typing import Any, Dict
 import logging
 
-from . import DOMAIN
-
-MODELS = ["tiny", "small", "base", "medium", "large-v3"]
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +22,6 @@ class ConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required("server"): str,
-                    vol.Optional("model", default="base"): vol.In(MODELS),
                 },
             ),
             errors=errors,

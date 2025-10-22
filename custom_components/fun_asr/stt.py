@@ -1,6 +1,5 @@
 import logging
 import aiohttp
-import time
 from collections.abc import AsyncIterable
 
 from homeassistant.components import stt
@@ -8,7 +7,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,13 +22,8 @@ async def async_setup_entry(
 class FasterASRSTT(stt.SpeechToTextEntity):
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
         server: str = config_entry.data["server"]
-
-        if server.endswith("/"):
-            self.address = f"{server}api"
-        else:
-            self.address = f"{server}/api"
-        self.model: str = config_entry.data["model"]
-        self._attr_name = f"Fun Asr server: ({server})"
+        self.server = server
+        self._attr_name = f"Fun Asr({server})"
         self._attr_unique_id = f"{config_entry.entry_id[:7]}-fun-asr"
 
     @property
@@ -64,7 +57,7 @@ class FasterASRSTT(stt.SpeechToTextEntity):
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.post(self.address, data=stream) as resp:
+                async with session.post(self.server, data=stream) as resp:
                     if resp.status == 200:
                         result = await resp.text()
                         _LOGGER.debug(f"process_audio_stream end: {result}")
